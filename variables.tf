@@ -21,6 +21,11 @@ variable "type" {
   type        = string
 }
 
+variable "certificate_arns" {
+  description = "Certificates to use for ALB listeners"
+  type = list(string)
+}
+
 variable "internal" {
   description = "Provision an internal load balancer. Defaults to false."
   type        = bool
