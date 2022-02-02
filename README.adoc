@@ -7,6 +7,35 @@ Create an application or network load balancer, pre-setup for Vy's use-cases.
 
 toc::[]
 
+== About
+
+This module sets up either an ALB or NLB with typical Vy requirements.
+
+With ALBs you get a secure setup for HTTP(S) based workloads, without much hasel 🎉
+
+== Usage
+
+Set this module up in your `<account>-aws` repository!
+
+[source, hcl]
+----
+module "loadbalancer" {
+  source = "github.com/nsbno/terraform-aws-loadbalancer?ref=x.y.z"
+
+  type = "application"
+
+  name_prefix = "infrademo"
+  vpc_id      = data.aws_vpc.main.id
+  subnet_ids  = data.aws_subnet_ids.public.ids
+
+  certificate_arns = [
+    aws_acm_certificate.vydev_io.arn,
+    aws_acm_certificate.vy_no.arn,
+    aws_acm_certificate.vy_se.arn
+  ]
+}
+----
+
 == Relevant Repositories
 
 link:https://github.com/nsbno/terraform-aws-ecs-service[`nsbno/terraform-aws-ecs-service`]::
