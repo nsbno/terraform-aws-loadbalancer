@@ -5,6 +5,11 @@ locals {
   name_prefix = "${var.name_prefix}-${var.type == "network" ? "nlb" : "alb"}"
 }
 
+/*
+ * == Main Loadbalancer
+ *
+ * Sets up the loadbalancer itself.
+ */
 resource "aws_lb" "main" {
   name               = local.name_prefix
   load_balancer_type = var.type
@@ -27,8 +32,11 @@ resource "aws_lb" "main" {
   )
 }
 
+/*
+ * == Security Groups
+ */
 resource "aws_security_group" "main" {
-  count       = var.type == "network" ? 0 : 1
+  count       = var.type == "application" ? 1 : 0
   name        = "${local.name_prefix}-sg"
   description = "Terraformed security group."
   vpc_id      = var.vpc_id
@@ -41,8 +49,9 @@ resource "aws_security_group" "main" {
   )
 }
 
+
 resource "aws_security_group_rule" "egress" {
-  count             = var.type == "network" ? 0 : 1
+  count             = var.type == "application" ? 1 : 0
   security_group_id = aws_security_group.main[0].id
   type              = "egress"
   protocol          = "-1"
