@@ -1,0 +1,13 @@
+= AWS Loadbalancer
+:toc:
+:!toc-title:
+:!toc-placement:
+
+Create an application or network load balancer, pre-setup for Vy's use-cases.
+
+toc::[]
+
+== Relevant Repositories
+
+link:https://github.com/nsbno/terraform-aws-ecs-service[`nsbno/terraform-aws-ecs-service`]::
+Easily set up a container based service with links back to this loadbalancer.
