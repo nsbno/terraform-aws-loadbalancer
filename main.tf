@@ -52,9 +52,11 @@ resource "aws_lb" "main" {
  */
 locals {
   main_certificate = var.certificate_arns[0]
-  extra_certificates = length(var.certificate_arns) > 1
-    ? slice(var.certificate_arns, 1, length(var.certificate_arns))
-    : []
+  extra_certificates = (
+    length(var.certificate_arns) > 1
+      ? slice(var.certificate_arns, 1, length(var.certificate_arns))
+      : []
+  )
 }
 
 /*
@@ -83,7 +85,7 @@ resource "aws_lb_listener" "https" {
 resource "aws_lb_listener_certificate" "extra" {
   for_each = { for idx, cert in local.extra_certificates : idx => cert }
 
-  listener_arn    = aws_lb_listener.https.arn
+  listener_arn    = aws_lb_listener.https[0].arn
   certificate_arn = each.value
 }
 
