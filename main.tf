@@ -7,28 +7,15 @@ locals {
  */
 resource "aws_security_group" "this" {
   count       = var.type == "application" ? 1 : 0
-  name        = "${local.name_prefix}-sg"
-  description = "Terraformed security group."
+  name        = "${local.name_prefix}"
   vpc_id      = var.vpc_id
 
   tags = merge(
-  var.tags,
-  {
-    "Name" = "${local.name_prefix}-sg"
-  },
+    var.tags,
+    {
+      "Name" = "${local.name_prefix}"
+    },
   )
-}
-
-
-resource "aws_security_group_rule" "egress" {
-  count             = var.type == "application" ? 1 : 0
-  security_group_id = aws_security_group.this[0].id
-  type              = "egress"
-  protocol          = "-1"
-  from_port         = 0
-  to_port           = 0
-  cidr_blocks       = ["0.0.0.0/0"]
-  ipv6_cidr_blocks  = ["::/0"]
 }
 
 /*
