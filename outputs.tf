@@ -1,6 +1,3 @@
-# ------------------------------------------------------------------------------
-# Output
-# ------------------------------------------------------------------------------
 output "arn" {
   description = "The ARN of the load balancer."
   value       = aws_lb.main.arn
@@ -34,4 +31,14 @@ output "origin_id" {
 output "security_group_id" {
   description = "The ID of the security group."
   value       = concat(aws_security_group.main[*].id, [""])[0]
+}
+
+output "https_listener_arn" {
+  description = "Listener for HTTPS (port 443) traffic"
+  value = try(aws_lb_listener.https[0].arn, null)
+}
+
+output "http_listener_arn" {
+  description = "Listener for HTTP (port 80) traffic"
+  value = try(aws_lb_listener.http[0].arn, null)
 }
