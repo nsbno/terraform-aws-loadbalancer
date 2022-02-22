@@ -51,7 +51,7 @@ resource "aws_lb" "main" {
  * Redirect HTTP to HTTPS, and tell users when they're lost (404).
  */
 locals {
-  main_certificate = var.certificate_arns[0]
+  main_certificate = try(var.certificate_arns[0], null)
   extra_certificates = (
     length(var.certificate_arns) > 1
       ? slice(var.certificate_arns, 1, length(var.certificate_arns))

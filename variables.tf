@@ -22,8 +22,10 @@ variable "type" {
 }
 
 variable "certificate_arns" {
-  description = "Certificates to use for ALB listeners"
+  description = "Certificates to use for ALB listeners. If left empty, default AWS certificate will be used"
   type = list(string)
+
+  default = []
 }
 
 variable "internal" {
