@@ -5,15 +5,12 @@
 
 Create an application or network load balancer, pre-setup for Vy's use-cases.
 
+With ALBs you get a secure setup for HTTP(S) based workloads, without much hassle 🎉
+
 toc::[]
 
-== About
-
-This module sets up either an ALB or NLB with typical Vy requirements.
-
-With ALBs you get a secure setup for HTTP(S) based workloads, without much hasel 🎉
-
 == Usage
+Remember to check out the link:variables.tf[*variables*] and link:outputs.tf[*outputs*] to see all options.
 
 Set this module up in your `<account>-aws` repository!
 
@@ -35,6 +32,13 @@ module "loadbalancer" {
   ]
 }
 ----
+
+== Examples
+link:examples/basic/main.tf[Basic Example]::
+Basic example
+
+link:examples/complete/main.tf[Complete Example]::
+Complete example
 
 == Relevant Repositories
 
