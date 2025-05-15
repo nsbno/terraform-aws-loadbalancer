@@ -8,22 +8,36 @@ provider "aws" {
 }
 
 data "aws_vpc" "main" {
-  default = true
+  tags = {
+	Name = "shared"
+  }
 }
 
-data "aws_subnet_ids" "main" {
-  vpc_id = data.aws_vpc.main.id
+data "aws_subnets" "public" {
+  filter {
+	name   = "vpc-id"
+	values = [data.aws_vpc.main.id]
+  }
+
+  tags = {
+	Tier = "Public"
+  }
+}
+
+module "lb_certificate" {
+  source           = "github.com/nsbno/terraform-aws-acm-certificate?ref=x.y.z"
+  hosted_zone_name = "test.infrademo.vydev.io"
+  domain_name      = "alb.test.infrademo.vydev.io"
 }
 
 module "lb" {
   source      = "../../"
-  name_prefix = var.name_prefix
-  vpc_id      = data.aws_vpc.main.id
-  subnet_ids  = data.aws_subnet_ids.main.ids
-  type        = "application"
 
-  tags = {
-    environment = "dev"
-    terraform   = "True"
-  }
+  type        = "application"
+  name_prefix = "basic-example"
+
+  vpc_id      = data.aws_vpc.main.id
+  subnet_ids  = data.aws_subnets.public.ids
+
+  certificate_arns = [module.lb_certificate.arn]
 }

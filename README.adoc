@@ -37,8 +37,8 @@ module "loadbalancer" {
 link:examples/basic/main.tf[Basic Example]::
 Basic example
 
-link:examples/complete/main.tf[Complete Example]::
-Complete example
+link:examples/with_access_logs/main.tf[Example with Access Logging]::
+Example with access logging
 
 == Relevant Repositories
 

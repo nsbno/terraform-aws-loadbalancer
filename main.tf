@@ -1,5 +1,5 @@
 locals {
-  name_prefix = "${var.name_prefix}-${var.type == "network" ? "nlb" : "alb"}"
+  name = "${var.name_prefix}-${var.type == "network" ? "nlb" : "alb"}"
 }
 
 /*
@@ -7,13 +7,13 @@ locals {
  */
 resource "aws_security_group" "this" {
   count       = var.type == "application" ? 1 : 0
-  name        = "${local.name_prefix}"
+  name        = local.name
   vpc_id      = var.vpc_id
 
   tags = merge(
     var.tags,
     {
-      "Name" = "${local.name_prefix}"
+      "Name" = local.name
     },
   )
 }
@@ -24,7 +24,7 @@ resource "aws_security_group" "this" {
  * Sets up the loadbalancer itself.
  */
 resource "aws_lb" "main" {
-  name               = local.name_prefix
+  name               = local.name
   load_balancer_type = var.type
   internal           = var.internal
   subnets            = var.subnet_ids
@@ -40,7 +40,7 @@ resource "aws_lb" "main" {
   tags = merge(
     var.tags,
     {
-      "Name" = local.name_prefix
+      "Name" = local.name
     },
   )
 }
