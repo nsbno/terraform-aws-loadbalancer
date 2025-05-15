@@ -101,6 +101,47 @@ resource "aws_security_group_rule" "allow_https" {
 }
 
 /*
+ * === HTTPS Testing
+ */
+resource "aws_lb_listener" "https_test" {
+  count = var.type == "application" ? 1 : 0
+
+  load_balancer_arn = aws_lb.main.arn
+  port              = "8443"
+  protocol          = "HTTPS"
+  certificate_arn   = local.main_certificate
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Unknown Service"
+      status_code  = "404"
+    }
+  }
+}
+
+resource "aws_lb_listener_certificate" "test_extra" {
+  for_each = { for idx, cert in local.extra_certificates : idx => cert }
+
+  listener_arn    = aws_lb_listener.https_test[0].arn
+  certificate_arn = each.value
+}
+
+resource "aws_security_group_rule" "allow_https_test" {
+  security_group_id = aws_security_group.this[0].id
+  type              = "ingress"
+  from_port         = "8443"
+  to_port           = "8443"
+  protocol          = "tcp"
+
+  cidr_blocks = ["0.0.0.0/0"]
+  ipv6_cidr_blocks = ["::/0"]
+}
+
+/*
  * === HTTP
  */
 resource "aws_lb_listener" "http" {
