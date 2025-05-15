@@ -126,7 +126,7 @@ resource "aws_lb_listener" "https_test" {
 resource "aws_lb_listener_certificate" "test_extra" {
   for_each = { for idx, cert in local.extra_certificates : idx => cert }
 
-  listener_arn    = aws_lb_listener.https[0].arn
+  listener_arn    = aws_lb_listener.https_test[0].arn
   certificate_arn = each.value
 }
 
