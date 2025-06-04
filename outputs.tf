@@ -42,3 +42,8 @@ output "http_listener_arn" {
   description = "Listener for HTTP (port 80) traffic"
   value = try(aws_lb_listener.http[0].arn, null)
 }
+
+output "https_test_listener_arn" {
+  description = "Listener for HTTPS (port 8443) traffic"
+  value = try(aws_lb_listener.https_test[0].arn, null)
+}
