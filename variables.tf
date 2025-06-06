@@ -1,6 +1,13 @@
+variable "name" {
+  description = "The name of the load balancer."
+  type        = string
+  default     = null
+}
+
 variable "name_prefix" {
   description = "A prefix used for naming resources."
   type        = string
+  default     = null
 }
 
 variable "vpc_id" {
@@ -20,7 +27,7 @@ variable "type" {
 
 variable "certificate_arns" {
   description = "Certificates to use for ALB listeners"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "internal" {

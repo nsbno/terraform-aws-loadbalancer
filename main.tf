@@ -6,9 +6,9 @@ locals {
  * == Security Groups
  */
 resource "aws_security_group" "this" {
-  count       = var.type == "application" ? 1 : 0
-  name        = local.name
-  vpc_id      = var.vpc_id
+  count  = var.type == "application" ? 1 : 0
+  name   = local.name
+  vpc_id = var.vpc_id
 
   tags = merge(
     var.tags,
@@ -16,6 +16,10 @@ resource "aws_security_group" "this" {
       "Name" = local.name
     },
   )
+  lifecycle {
+    # To avoid recreation issues, we ignore changes to the name and description.
+    ignore_changes = [name, description]
+  }
 }
 
 /*
@@ -43,6 +47,12 @@ resource "aws_lb" "main" {
       "Name" = local.name
     },
   )
+  lifecycle {
+    ignore_changes = [
+      # To avoid recreation issues with the name changing, we ignore changes to the name.
+      name
+    ]
+  }
 }
 
 /*
@@ -54,8 +64,8 @@ locals {
   main_certificate = var.certificate_arns[0]
   extra_certificates = (
     length(var.certificate_arns) > 1
-      ? slice(var.certificate_arns, 1, length(var.certificate_arns))
-      : []
+    ? slice(var.certificate_arns, 1, length(var.certificate_arns))
+    : []
   )
 }
 
@@ -96,7 +106,7 @@ resource "aws_security_group_rule" "allow_https" {
   to_port           = "443"
   protocol          = "tcp"
 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
 }
 
@@ -137,7 +147,7 @@ resource "aws_security_group_rule" "allow_https_test" {
   to_port           = "8443"
   protocol          = "tcp"
 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
 }
 
@@ -169,6 +179,6 @@ resource "aws_security_group_rule" "allow_http" {
   to_port           = "80"
   protocol          = "tcp"
 
-  cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
 }
