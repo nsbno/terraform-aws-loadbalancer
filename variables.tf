@@ -53,3 +53,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "ssl_policy" {
+  description = "The security policy that defines which protocols and ciphers are supported by the load balancer."
+  type        = string
+  default     = "ELBSecurityPolicy-TLS-1-2-2017-01"
+}
